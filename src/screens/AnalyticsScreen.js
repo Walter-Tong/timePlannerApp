@@ -8,8 +8,9 @@ import EventContext from "../context/EventContext";
 import { MaterialIcons } from '@expo/vector-icons';
 import getIcon from "../function/getIcon";
 import { icons } from "../enum";
-import { LineChart } from "react-native-chart-kit";
+import { BarChart, LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
+import { VictoryBar, VictoryGroup,  VictoryLabel } from "victory-native";
 
 function calculateDateDifference(date1, date2) {
     const differenceInMilliseconds = Math.abs(date2 - date1);
@@ -25,7 +26,7 @@ function AnalyticsScreen() {
 
     const [lineChartIndex, setLineChartIndex] = useState(0);
 
-    const dateArray = [0, 1, 3, 7];
+    const dateArray = [0, 1, 3, 7, 14, 30, 90];
 
     const now = new Date();
 
@@ -78,7 +79,7 @@ function AnalyticsScreen() {
     console.log(lineChartContent)
 
     const types = eventTypes.map((item, index) => {
-        return <Text key={index} style={{marginRight: 5}}>
+        return <Text key={index} style={{ marginRight: 5 }}>
             {getIcon.call(icons, item)} {item.type}
         </Text>
     })
@@ -103,6 +104,20 @@ function AnalyticsScreen() {
         ))
     }
 
+    const barChartData = [];
+
+    console.log(pieChartColor);
+
+    let counter = pieChartContent.filter(item => item).length;
+
+    for (let i = 0; i < pieChartColor.length; i++) {
+        if (pieChartContent[i]) {
+            barChartData.push({ x: counter--, y: pieChartContent[i] / (1000 * 3600), label: (pieChartContent[i] / (1000 * 3600)).toFixed(2), fill: pieChartColor[i] })
+        }
+    }
+
+    console.log(barChartData)
+
     return (
         <View style={style.page}>
             <View style={style.pageTitleBox}>
@@ -117,9 +132,14 @@ function AnalyticsScreen() {
                 </Text>
                 {(daysBefore < dateArray.length - 1) ? <MaterialIcons name="keyboard-arrow-right" size={24} color="black" onPress={() => setDaysBefore(daysBefore + 1)} /> : <MaterialIcons name="keyboard-arrow-right" size={24} color="#CCC" />}
             </View>
-            <ScrollView style={{flex: 1}}>
+            <ScrollView style={{ flex: 1 }}>
                 <View style={{ padding: 5, marginTop: 10 }}>
-                    {pieChartContent.reduce((sum, a) => sum + a) === 0 ? <Text>No Event</Text> : <PieChart widthAndHeight={250} series={pieChartContent} sliceColor={pieChartColor} coverFill={null} />}
+                    {pieChartContent.reduce((sum, a) => sum + a) === 0 ? <Text>No Event</Text> : <PieChart widthAndHeight={250} series={pieChartContent} sliceColor={pieChartColor} coverFill={null} coverRadius={0.7} />}
+                </View>
+                <View >
+                    <VictoryGroup colorScale={pieChartColor} animate={{ duration: 2000 }} domain={{y: [-0.1, Math.max(...pieChartContent.map(item => item/(1000*3600)))*1.5]}}>
+                        <VictoryBar data={barChartData} horizontal barWidth={15} barRatio={0.1} style={{data: {fill: ({datum}) => datum.fill}}} />
+                    </VictoryGroup>
                 </View>
                 <View style={{ flexDirection: 'row', flexWrap: 'wrap' }}>
                     {pieChartContent.reduce((sum, a) => sum + a) !== 0 && types}
@@ -132,7 +152,7 @@ function AnalyticsScreen() {
                 </Text>
                 {(lineChartIndex < eventTypes.length - 1) ? <MaterialIcons name="keyboard-arrow-right" size={24} color="black" onPress={() => setLineChartIndex(lineChartIndex + 1)} /> : <MaterialIcons name="keyboard-arrow-right" size={24} color="#CCC" />}
             </View>
-            <ScrollView style={{flex: 1}}>
+            <ScrollView style={{ flex: 1 }}>
                 <View>
                     {events.length !== 0 && lineCharts[lineChartIndex]}
                 </View>

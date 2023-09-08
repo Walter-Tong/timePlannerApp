@@ -22,7 +22,7 @@ function CurrentEvent() {
 
     const [now, setNow] = useState((() => {
         const temp = new Date();
-        temp.setHours(temp.getHours + 8)
+        temp.setUTCHours(temp.getUTCHours() + 8)
         return temp
     })())
 
@@ -30,13 +30,13 @@ function CurrentEvent() {
 
     const CopyStartTime = new Date(startTime);
 
-    CopyStartTime.setHours(startTime.getHours() + 8);
+    CopyStartTime.setUTCHours(startTime.getUTCHours() + 8);
 
     useEffect(() => {
         if (!duringEvent.endTime) {
             const current = new Date()
-            current.setHours(current.getHours() + 8)
-            current.setSeconds(current.getSeconds() + 1)
+            current.setUTCHours(current.getUTCHours() + 8)
+            current.setUTCSeconds(current.getUTCSeconds() + 1)
             setTimeout(() => {
                 setNow(current)
             }, 1000)
@@ -52,10 +52,10 @@ function CurrentEvent() {
     const handleStop = async () => {
         const endTime = new Date()
         const CopyEndTime = new Date(endTime);
-        CopyEndTime.setHours(endTime.getHours() + 8);
+        CopyEndTime.setUTCHours(endTime.getUTCHours() + 8);
         setContent(
             <View>
-                <View style={{justifyContent: "space-between", flexDirection: "row"}}>
+                <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
                     <Text>
                         To:
                     </Text>
@@ -65,20 +65,21 @@ function CurrentEvent() {
                 </View>
             </View>
         )
-        addEvent({ startTime: CopyStartTime.toISOString(), endTime: CopyEndTime.toISOString(), type: duringEvent.type })
-        saveDuringEvent({ ...duringEvent, endTime })
+
+        await addEvent({ startTime: CopyStartTime.toISOString(), endTime: CopyEndTime.toISOString(), type: duringEvent.type })
+        await saveDuringEvent({ ...duringEvent, endTime })
     }
 
     let timeDifferent = Math.floor((now.getTime() - CopyStartTime.getTime()))
 
     return (
-        <View style={[style.itemBox, {height: "85%"}]}>
+        <View style={[style.itemBox, { height: "85%" }]}>
             <View>
                 <Text style={{ fontSize: 24 }}>
                     {getIcon.call(icons, getType(eventTypes, duringEvent.type))}{duringEvent.type}
                 </Text>
             </View>
-            <View style={{justifyContent: "space-between", flexDirection: "row"}}>
+            <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
                 <Text>
                     From:
                 </Text>
@@ -87,7 +88,7 @@ function CurrentEvent() {
                 </Text>
             </View>
             {content}
-            <View style={{justifyContent: "space-between", flexDirection: "row"}}>
+            <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
                 <Text>
                     Passed:
                 </Text>
@@ -97,7 +98,7 @@ function CurrentEvent() {
                     {(~~(timeDifferent / (1000)) % 60).toString().padStart(2, '0')}
                 </Text>
             </View>
-            {duringEvent.endTime === null && <TouchableOpacity onPress={handleStop} style={[style.itemBox, {flex: 1, alignItems: "center" ,backgroundColor: "#BBB", justifyContent: "center", marginBottom: 10}]}><Text style={{fontSize: 64}}>Stop<Octicons name="stopwatch" size={64} color="black" /></Text></TouchableOpacity>}
+            {duringEvent.endTime === null && <TouchableOpacity onPress={handleStop} style={[style.itemBox, { flex: 1, alignItems: "center", backgroundColor: "#BBB", justifyContent: "center", marginBottom: 10 }]}><Text style={{ fontSize: 64 }}>Stop<Octicons name="stopwatch" size={64} color="black" /></Text></TouchableOpacity>}
         </View>
     )
 }

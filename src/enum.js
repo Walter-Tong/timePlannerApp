@@ -3,6 +3,7 @@ import { Entypo } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { FontAwesome } from '@expo/vector-icons';
 
 const EVENTTYPES = "eventTypes";
 const EVENTS = "events";
@@ -17,7 +18,8 @@ const icons = {
     coding: <AntDesign name="codesquare" size={24} />,
     meal: <Ionicons name="fast-food" size={24} />,
     bath: <FontAwesome5 name="bath" size={24} />,
-    sleep: <MaterialCommunityIcons name="power-sleep" size={24} />
+    sleep: <MaterialCommunityIcons name="power-sleep" size={24} />,
+    transport: <FontAwesome name="car" size={24} />
     
 }
 

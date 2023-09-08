@@ -4,6 +4,13 @@ import { DURINGEVENT, EVENTS, EVENTTYPES } from "../enum";
 
 const EventContext = createContext();
 
+function calculateDateDifference(date1, date2) {
+    const differenceInMilliseconds = Math.abs(date2 - date1);
+    const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
+
+    return differenceInDays;
+}
+
 function EventProvider({ children }) {
 
     const [events, setEvents] = useState([]); // = [{date: xxxx-xx-xx, event:[]}, {date: xxxx-xx-xx, event:[]},] +8 before turn to string, -8 when turn back to date
@@ -11,13 +18,14 @@ function EventProvider({ children }) {
         { type: "Game", icon: "game", color: "#049" },
         { type: "Study", icon: "study", color: "#5D7" },
         { type: "Lecture", icon: "lecture", color: "#004b00" },
-        { type: "Social", icon: "social", color: "#5784DD"},
+        { type: "Social", icon: "social", color: "#5784DD" },
         { type: "YouTube", icon: "youtube", color: "#FF0000" },
         { type: "Gym", icon: "gym", color: "#592321" },
         { type: "Coding", icon: "coding", color: "#F44611" },
         { type: "Meal", icon: "meal", color: "#3B83BD" },
         { type: "Bath", icon: "bath", color: "#E55137" },
-        { type: "Sleep", icon: "sleep", color: "#924E7D" }
+        { type: "Sleep", icon: "sleep", color: "#924E7D" },
+        { type: "Transport", icon: "transport", color: "#67E" }
     ]); // = [{type: xxx, icon, color}]
     const [duringEvent, setDuringEvent] = useState(null);
 
@@ -27,7 +35,16 @@ function EventProvider({ children }) {
             const storageEventTypes = await AsyncStorage.getItem(EVENTTYPES)
             const storageDuringEvent = await AsyncStorage.getItem(DURINGEVENT)
             if (storageEvents) {
-                setEvents(JSON.parse(storageEvents))
+                const temp = JSON.parse(storageEvents)
+
+                const now = new Date();
+
+                now.setUTCHours(0);
+                now.setUTCMinutes(0);
+                now.setUTCSeconds(0);
+                now.setUTCMilliseconds(0);
+
+                setEvents(temp.filter((item) => (new Date(now) - new Date(item.date)) / (1000 * 60 * 60 * 24) <= 180 && item.event.length))
             }
             if (storageEventTypes) {
                 setEventTypes(JSON.parse(storageEventTypes))
@@ -76,20 +93,68 @@ function EventProvider({ children }) {
 
         console.log(copyEvents, events, "addEvent")
 
-        let checker = true;
+        const toProcess = []
 
-        for (let i = 0; i < events.length; i++) {
-            if (events[i].date === value.startTime.substring(0, 10)) {
-                copyEvents[i].event.push({ ...value })
-                copyEvents[i].event.sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
-                checker = false;
-                break;
+        if (value.startTime.substring(0, 10) !== value.endTime.substring(0, 10)) {
+            let today = new Date(value.startTime.substring(0, 10))
+            while (today.toISOString().substring(0, 10) !== value.endTime.substring(0, 10)) {
+                if (today.toISOString().substring(0, 10) === value.startTime.substring(0, 10)) {
+                    const tempTime = new Date(today);
+                    tempTime.setUTCHours(23);
+                    tempTime.setUTCMinutes(59);
+                    tempTime.setUTCSeconds(59);
+                    tempTime.setUTCMilliseconds(999);
+                    toProcess.push({ type: value.type, startTime: value.startTime, endTime: tempTime.toISOString() })
+                } else if (today.toISOString().substring(0, 10) === value.endTime.substring(0, 10)) {
+                    const tempTime = new Date(today);
+                    tempTime.setUTCHours(0);
+                    tempTime.setUTCMinutes(0);
+                    tempTime.setUTCSeconds(0);
+                    tempTime.setUTCMilliseconds(0);
+                    toProcess.push({ type: value.type, startTime: tempTime.toISOString(), endTime: value.endTime })
+                } else {
+                    const tempTime = new Date(today);
+                    tempTime.setUTCHours(23);
+                    tempTime.setUTCMinutes(59);
+                    tempTime.setUTCSeconds(59);
+                    tempTime.setUTCMilliseconds(999);
+                    const tempTime2 = new Date(today);
+                    tempTime2.setUTCHours(0);
+                    tempTime2.setUTCMinutes(0);
+                    tempTime2.setUTCSeconds(0);
+                    tempTime2.setUTCMilliseconds(0);
+                    toProcess.push({ type: value.type, startTime: tempTime2.toISOString(), endTime: tempTime.toISOString() })
+                }
+                today.setUTCDate(today.getUTCDate() + 1)
             }
+            const tempTime = new Date(today);
+            tempTime.setUTCHours(0);
+            tempTime.setUTCMinutes(0);
+            tempTime.setUTCSeconds(0);
+            tempTime.setUTCMilliseconds(0);
+            toProcess.push({ type: value.type, startTime: tempTime.toISOString(), endTime: value.endTime })
+        } else {
+            toProcess.push(value)
         }
 
-        if (checker) {
-            copyEvents.push({ date: value.startTime.substring(0, 10), event: [{ ...value }] })
-        }
+        toProcess.forEach((item) => {
+            let checker = true;
+
+            for (let i = 0; i < events.length; i++) {
+                if (events[i].date === item.startTime.substring(0, 10)) {
+                    copyEvents[i].event.push({ ...item })
+                    copyEvents[i].event.sort((a, b) => new Date(a.startTime) - new Date(b.startTime))
+                    checker = false;
+                    break;
+                }
+            }
+
+            if (checker) {
+                copyEvents.unshift({ date: item.startTime.substring(0, 10), event: [{ ...item }] })
+            }
+        })
+
+        copyEvents.sort((a, b) => new Date(a.date) - new Date(b.date))
 
         await saveEvent(copyEvents)
     }
@@ -99,7 +164,7 @@ function EventProvider({ children }) {
 
         const copyEvents = JSON.parse(JSON.stringify(events))
 
-        copyEvents[index].event = [...events[index].event.slice(0, subIndex), value, ...events[index].event.slice(subIndex + 1)];
+        copyEvents[index].event = [...events[index].event.slice(0, subIndex), value, ...events[index].event.slice(subIndex + 1)].sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 
         await saveEvent(copyEvents)
     }

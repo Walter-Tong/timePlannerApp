@@ -41,6 +41,21 @@ function EventListItem({ item, index, currentDate }) {
         copyEndTime.setUTCMinutes(editEnd.min)
         copyEndTime.setUTCSeconds(editEnd.sec)
 
+        for (let i = 0; i < events.length; i++) {
+            if (events[i].date === copyStartTime.toISOString().substring(0, 10)) {
+                if (events[i].event.length) {
+                    for (let j = 0; j < events[i].event.length; j++) {
+                        const item = events[i].event[j]
+                        if (((new Date(item.startTime) < copyStartTime && copyStartTime < new Date(item.endTime)) || (new Date(item.startTime) < copyEndTime && copyEndTime < new Date(item.endTime)) && j !== ind)) {
+                            return
+                        }
+                    }
+                } else {
+                    break;
+                }
+            }
+        }
+
         if (copyEndTime > copyStartTime) {
             console.log(copyStartTime, copyEndTime)
             await editEvent({ type: item.type, startTime: copyStartTime.toISOString(), endTime: copyEndTime.toISOString() }, currentDate, ind)
