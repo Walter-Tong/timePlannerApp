@@ -93,7 +93,7 @@ function EventListItem({ item, index, currentDate }) {
 
     return (
         <View style={style.itemBox}>
-            <View style={{ flexDirection: "row", alignItems: "left", justifyContent: "space-between" }}>
+            <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
                 <View>
                     <Text>
                         {getIcon.call(icons, getType(eventTypes, item.type))}

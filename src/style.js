@@ -9,7 +9,7 @@ const style = StyleSheet.create({
     },
     pageTitleBox: {
         flexDirection: "row",
-        alignItems: "left",
+        alignItems: "flex-start",
         justifyContent: "space-between",
         padding: 5,
         marginTop: 10,

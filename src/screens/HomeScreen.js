@@ -33,11 +33,11 @@ function HomeScreen() {
     const eventTypesRender = eventTypes.map((item, index) => {
         return (
             <TouchableOpacity key={index} onPress={() => handleNewEvent(item.type)}>
-                <View style={{ flexDirection: "row", alignItems: "left", justifyContent: "space-between", marginTop: 15, borderStyle: "solid", borderColor: "#000", backgroundColor: "#CCC", borderRadius: 10, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5 }}>
+                <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between", marginTop: 15, borderStyle: "solid", borderColor: "#000", backgroundColor: "#CCC", borderRadius: 10, shadowColor: "#000", shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, elevation: 5 }}>
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         {getIcon.call(icons, item)}<Text>{item.type}</Text>
                     </View>
-                    <View style={{ alignSelf: "rigth" }}>
+                    <View style={{ alignSelf: "right" }}>
                         <Ionicons name="stopwatch-outline" size={24} color="black" />
                     </View>
                 </View>
