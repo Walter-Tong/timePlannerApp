@@ -1,6 +1,5 @@
 import { Text, View } from "react-native";
 import style from "../style";
-import { TouchableOpacity } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

@@ -8,8 +8,6 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { TextInput } from "react-native";
 import { useState } from "react";
 import { TriangleColorPicker, fromHsv } from "react-native-color-picker";
-import Slider from "@react-native-community/slider";
-import { ScrollView } from "react-native";
 import { AntDesign } from '@expo/vector-icons';
 import { Button } from "react-native";
 import { Modal } from "react-native";

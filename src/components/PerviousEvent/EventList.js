@@ -1,7 +1,5 @@
-import { ScrollView, Text } from "react-native";
-import { View } from "react-native";
+import { ScrollView } from "react-native";
 import EventListItem from "./EventListItem";
-import { useEffect } from "react";
 
 function EventList({currentDate, events}) {
 

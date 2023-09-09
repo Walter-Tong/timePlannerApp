@@ -1,5 +1,5 @@
 import { useState, useContext } from "react";
-import { Text, View, TouchableOpacity, Button, TextInput } from "react-native";
+import { Text, View, TouchableOpacity, Button } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons';
 import EventContext from "../context/EventContext";
@@ -13,13 +13,9 @@ import getIcon from "../function/getIcon";
 import { icons } from "../enum";
 import TimeForm from "../components/PerviousEvent/TimeForm";
 
-function isNumericString(input) {
-    return /^[0-9]+$/.test(input);
-}
-
 function PerviousEventsScreen() {
 
-    const { eventTypes, events, duringEvent, saveEvent, saveEventTypes, saveDuringEvent, addEvent } = useContext(EventContext)
+    const { eventTypes, events, addEvent } = useContext(EventContext)
 
     const [currentDate, setCurrentDate] = useState(0);
 

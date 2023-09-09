@@ -5,7 +5,6 @@ import EventContext from "../../context/EventContext";
 import { icons } from "../../enum";
 import getIcon from "../../function/getIcon";
 import getType from "../../function/getType";
-import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import TimeForm from "./TimeForm";
@@ -15,7 +14,7 @@ function EventListItem({ item, index, currentDate }) {
     const startTime = new Date(item.startTime)
     const endTime = new Date(item.endTime)
 
-    const { addEvent, removeEvent, editEvent } = useContext(EventContext)
+    const { removeEvent, editEvent, eventTypes, events } = useContext(EventContext)
 
     const [openEdit, setOpenEdit] = useState(false);
 
@@ -86,10 +85,6 @@ function EventListItem({ item, index, currentDate }) {
             </View>
         </View>
     )
-
-
-
-    const { eventTypes, events, duringEvent, saveEvent, saveEventTypes, saveDuringEvent } = useContext(EventContext)
 
     return (
         <View style={style.itemBox}>

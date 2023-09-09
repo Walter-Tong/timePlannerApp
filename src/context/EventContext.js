@@ -4,13 +4,6 @@ import { DURINGEVENT, EVENTS, EVENTTYPES } from "../enum";
 
 const EventContext = createContext();
 
-function calculateDateDifference(date1, date2) {
-    const differenceInMilliseconds = Math.abs(date2 - date1);
-    const differenceInDays = differenceInMilliseconds / (1000 * 60 * 60 * 24);
-
-    return differenceInDays;
-}
-
 function EventProvider({ children }) {
 
     const [events, setEvents] = useState([]); // = [{date: xxxx-xx-xx, event:[]}, {date: xxxx-xx-xx, event:[]},] +8 before turn to string, -8 when turn back to date

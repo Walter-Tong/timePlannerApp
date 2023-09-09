@@ -10,7 +10,7 @@ import { Octicons } from '@expo/vector-icons';
 
 function CurrentEvent() {
 
-    const { eventTypes, events, duringEvent, saveEvent, saveEventTypes, saveDuringEvent, addEvent } = useContext(EventContext)
+    const { eventTypes, duringEvent, saveDuringEvent, addEvent } = useContext(EventContext)
 
     //console.log(duringEvent)
 

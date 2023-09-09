@@ -19,7 +19,7 @@ function HomeScreen() {
         }
     }
 
-    const { eventTypes, events, duringEvent, saveEvent, saveEventTypes, saveDuringEvent } = useContext(EventContext)
+    const { eventTypes, events, duringEvent, saveDuringEvent } = useContext(EventContext)
 
     console.log(events)
 

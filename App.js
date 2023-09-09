@@ -1,6 +1,5 @@
-import { useState } from 'react';
 import 'react-native-gesture-handler';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import { View } from 'react-native';
 import { EventProvider } from './src/context/EventContext';
 import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './src/screens/HomeScreen';

@@ -8,9 +8,9 @@ import EventContext from "../context/EventContext";
 import { MaterialIcons } from '@expo/vector-icons';
 import getIcon from "../function/getIcon";
 import { icons } from "../enum";
-import { BarChart, LineChart } from "react-native-chart-kit";
+import { LineChart } from "react-native-chart-kit";
 import { Dimensions } from "react-native";
-import { VictoryBar, VictoryGroup,  VictoryLabel } from "victory-native";
+import { VictoryBar, VictoryGroup } from "victory-native";
 
 function calculateDateDifference(date1, date2) {
     const differenceInMilliseconds = Math.abs(date2 - date1);
