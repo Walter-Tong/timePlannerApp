@@ -37,7 +37,7 @@ function HomeScreen() {
                     <View style={{ flexDirection: "row", alignItems: "center" }}>
                         {getIcon.call(icons, item)}<Text>{item.type}</Text>
                     </View>
-                    <View style={{ alignSelf: "right" }}>
+                    <View style={{ alignSelf: "flex-end" }}>
                         <Ionicons name="stopwatch-outline" size={24} color="black" />
                     </View>
                 </View>
