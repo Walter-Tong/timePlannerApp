@@ -147,7 +147,7 @@ function EventProvider({ children }) {
             }
         })
 
-        copyEvents.sort((a, b) => new Date(a.date) - new Date(b.date))
+        copyEvents.sort((a, b) => new Date(b.date) - new Date(a.date))
 
         await saveEvent(copyEvents)
     }

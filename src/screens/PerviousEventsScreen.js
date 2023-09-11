@@ -100,7 +100,7 @@ function PerviousEventsScreen() {
             {events.length > 0 && <EventList currentDate={currentDate} events={events} />}
             <Modal visible={showEventForm} animationType="slide" style={{ backgroundColor: "#CCC" }}>
                 <View>
-                    <SelectList data={dropDownData} save="key" setSelected={(key) => setFormType(eventTypes[key].type)}/>
+                    <SelectList data={dropDownData} save="key" setSelected={(key) => setFormType(eventTypes[key].type)} placeholder="Select type"/>
                     <Text>
                         Date:
                         {formDate.toISOString().substring(0, 10)}

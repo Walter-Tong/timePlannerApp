@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import EventContext from "../context/EventContext";
 import { icons } from "../enum";
 import { MaterialIcons } from '@expo/vector-icons';
@@ -61,9 +61,9 @@ function HomeScreen() {
                 </Text>
                 {currentEventContent}
             </View>
-            <View>
+            <ScrollView>
                 {eventTypesRender}
-            </View>
+            </ScrollView>
         </View>
     )
 }
