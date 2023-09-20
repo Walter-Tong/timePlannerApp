@@ -1,4 +1,4 @@
-# timePlannerApp
+# Time Planner App
 This is a time planner app by React Native for record what you have done in one day.
 This idea is based on the time managment method of Alexander Alexandrovich Lyubishchev
 
